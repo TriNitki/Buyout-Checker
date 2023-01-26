@@ -6,12 +6,22 @@ from .models import Item
 
 def index(request):
     req = get('https://api.hypixel.net/skyblock/bazaar')
-    products = loads(req.text)['products']
 
-    g_list = getBuyOutList(products)
-    sorted_list = sorted(g_list, key=lambda prod: prod['price'])
+    products = getBuyOutList(loads(req.text)['products'])
     
-    context = {'products': sorted_list[:10]}
+    Item.objects.all().delete()
+
+    for product in products:
+        obj = Item()
+        obj.name = product['name']
+        obj.price = product['price']
+        obj.accuracy = product['accuracy']
+        obj.min_price = product['min_price']
+        obj.save()
+
+    products = Item.objects.order_by('price')
+
+    context = {'products': products}
     return render(request, 'buylist/index.html', context)
 
 def getBuyOutList(products):
@@ -46,4 +56,4 @@ def getProductInfo(product):
         price += (product['quick_status']['buyVolume'] - amount) * max_price
         accuracy = f"{round(amount / product['quick_status']['buyVolume']*100, 2)}%"
 
-    return {'price': price, 'accuracy' : accuracy, 'min_price' : min_price}
+    return {'price': round(price), 'accuracy' : accuracy, 'min_price' : min_price}
