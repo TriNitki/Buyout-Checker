@@ -1,0 +1,12 @@
+{% block content %}
+    {% for product in products %}
+    <div class='mb-3'>
+        <p>{{ product.name }}</p>
+        <ul>
+            <li>Цена выкупа        - {{ product.price }}</li>
+            <li>Мин цена           - {{ product.min_price }}</li>
+            <li>Точность подсчетов - {{ product.accuracy }}</li>
+        </ul>
+    </div>
+    {% endfor %}
+{% endblock content %}
