@@ -31,19 +31,19 @@
 {% block scripts %}
 <script>
     const data = '{{qs_json}}'
-    const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+    const allData = JSON.parse(data.replace(/&quot;/g, '"'))
     const input = document.getElementById('search_here')
- 
+    console.log(allData.data)
+    const listData = allData['data']
+
     let filteredArr = []
 
     input.addEventListener('keyup', (e)=>{
         box.innerHTML = ""
-        filteredArr = rdata.slice(0, parseInt(e.target.value))
-        console.log(filteredArr)
+        filteredArr = listData.slice(0, parseInt(e.target.value))
         if (filteredArr.length > 0){
             filteredArr.map(info=>{
                 box.innerHTML += `<div class="color_block"><div class="block_content"><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
-                console.log(`${info['name']}`)
             })
         } else {
             box.innerHTML = `<div class="color_block"><div class="block_content"><h3>No results found...</h3></div></div>`

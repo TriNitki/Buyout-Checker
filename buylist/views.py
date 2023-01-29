@@ -2,40 +2,47 @@ from django.shortcuts import render
 from requests import get
 import json
 
-from .models import Item, TableSetting
+from .models import Item, TableSetting, BlackList
 
 def index(request):
-    Item.objects.all().delete()
     table_settings = TableSetting.objects.get(id=1)
+    black_list = BlackList.objects.all()
 
     req = get('https://api.hypixel.net/skyblock/bazaar')
-    products = getBuyOutList(json.loads(req.text)['products'], table_settings)
-    sorted_products = sorted(products, key=lambda prod: prod['price'])
+    products = getBuyOutList(json.loads(req.text)['products'])
 
-    for product in sorted_products[:table_settings.max_items_amount]:
-        obj = Item()
-        obj.name = product['name']
-        obj.price = product['price']
-        obj.accuracy = product['accuracy']
-        obj.min_price = product['min_price']
-        obj.save()
+    updateDataBase(products)
 
-    products = Item.objects.order_by('price')
+    items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy') if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
 
-    context = {'products': products}
-    context["qs_json"] = json.dumps(list(Item.objects.values('name', 'price', 'accuracy')))
+    context = {}
+    context['products'] = items
+    context['qs_json'] = json.dumps({
+        'data': items,
+        })
+    print(context)
     return render(request, 'buylist/index.html', context)
 
-def getBuyOutList(products, table_settings):
+#if (product_info['price'] == 0 and not (table_settings.zero_price_items)) or (product_info['name'] in [bl_item.name for bl_item in black_list]):
+    #continue
+
+#black_list = BlackList.objects.all()
+#bl = [bl_item.name for bl_item in black_list]
+
+def updateDataBase(products):
+    for product in products:
+        item = Item.objects.get(name=product['name'])
+        item.accuracy = product['accuracy']
+        item.price = product['price']
+        item.min_price = product['min_price']
+        item.save()
+
+def getBuyOutList(products):
     product_id = products.keys()
     result = []
     for product in product_id:
         product_info = getProductInfo(products[product])
         product_info['name'] = product
-
-        if product_info['price'] == 0 and not (table_settings.zero_price_items):
-            continue
-        
         result.append(product_info)
     return result
 
@@ -57,6 +64,6 @@ def getProductInfo(product):
     
     if amount < product['quick_status']['buyVolume']:
         price += (product['quick_status']['buyVolume'] - amount) * max_price
-        accuracy = f"{round(amount / product['quick_status']['buyVolume']*100, 2)}%"
+        accuracy = amount / product['quick_status']['buyVolume']
 
-    return {'price': round(price), 'accuracy' : accuracy, 'min_price' : min_price}
+    return {'price': round(price), 'accuracy' : f"{round(accuracy*100, 2)}%", 'min_price' : min_price}

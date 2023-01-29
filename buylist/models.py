@@ -15,3 +15,9 @@ class TableSetting(models.Model):
 
     def __str__(self) -> str:
         return "Main settings!"
+
+class BlackList(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.item.name
