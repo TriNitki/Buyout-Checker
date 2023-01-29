@@ -13,21 +13,15 @@ def index(request):
 
     updateDataBase(products)
 
-    items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy') if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
+    items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy') 
+        if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
 
     context = {}
-    context['products'] = items
+    context['products'] = items[:10]
     context['qs_json'] = json.dumps({
         'data': items,
         })
-    print(context)
     return render(request, 'buylist/index.html', context)
-
-#if (product_info['price'] == 0 and not (table_settings.zero_price_items)) or (product_info['name'] in [bl_item.name for bl_item in black_list]):
-    #continue
-
-#black_list = BlackList.objects.all()
-#bl = [bl_item.name for bl_item in black_list]
 
 def updateDataBase(products):
     for product in products:
