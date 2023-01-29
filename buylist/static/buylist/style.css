@@ -1,0 +1,19 @@
+.color_block {
+    border: 2px #262a2b solid;
+    border-radius: 25px;
+    background: rgb(51, 55, 58);
+    width: 530px;
+    margin: 7px auto;
+}
+.color_block .block_content {
+    padding: 0 7px;
+}
+.block_content h3, .block_content p {
+    text-align: center;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    color:rgb(221, 218, 214);
+}
+body {
+    background: rgb(24, 26, 27);
+}

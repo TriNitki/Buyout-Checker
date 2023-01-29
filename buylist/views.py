@@ -2,16 +2,17 @@ from django.shortcuts import render
 from requests import get
 from json import loads
 
-from .models import Item
+from .models import Item, TableSetting
 
 def index(request):
-    req = get('https://api.hypixel.net/skyblock/bazaar')
-
-    products = getBuyOutList(loads(req.text)['products'])
-    
     Item.objects.all().delete()
+    table_settings = TableSetting.objects.get(id=1)
 
-    for product in products:
+    req = get('https://api.hypixel.net/skyblock/bazaar')
+    products = getBuyOutList(loads(req.text)['products'], table_settings)
+    sorted_products = sorted(products, key=lambda prod: prod['price'])
+
+    for product in sorted_products[:table_settings.max_items_amount]:
         obj = Item()
         obj.name = product['name']
         obj.price = product['price']
@@ -22,15 +23,17 @@ def index(request):
     products = Item.objects.order_by('price')
 
     context = {'products': products}
+    context["qs_json"] = json.dumps(list(Item.objects.values('name', 'price', 'accuracy')))
     return render(request, 'buylist/index.html', context)
 
-def getBuyOutList(products):
+def getBuyOutList(products, table_settings):
     product_id = products.keys()
     result = []
     for product in product_id:
         product_info = getProductInfo(products[product])
         product_info['name'] = product
-        if product_info['price'] == 0:
+
+        if product_info['price'] == 0 and not (table_settings.zero_price_items):
             continue
         
         result.append(product_info)

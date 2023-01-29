@@ -11,7 +11,7 @@ class Item(models.Model):
 
 class TableSetting(models.Model):
     zero_price_items = models.BooleanField()
-    max_prod_amount = models.IntegerField()
+    max_items_amount = models.IntegerField()
 
     def __str__(self) -> str:
         return "Main settings!"
