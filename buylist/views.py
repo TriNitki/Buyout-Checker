@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from requests import get
-from json import loads
+import json
 
 from .models import Item, TableSetting
 
@@ -9,7 +9,7 @@ def index(request):
     table_settings = TableSetting.objects.get(id=1)
 
     req = get('https://api.hypixel.net/skyblock/bazaar')
-    products = getBuyOutList(loads(req.text)['products'], table_settings)
+    products = getBuyOutList(json.loads(req.text)['products'], table_settings)
     sorted_products = sorted(products, key=lambda prod: prod['price'])
 
     for product in sorted_products[:table_settings.max_items_amount]:
