@@ -21,3 +21,28 @@ body {
     top: 32px; left: 0px;
     margin-top: -20px;
 }
+.settings{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.update_button input{
+    background-color: rgb(51, 55, 58);
+    border: 2px #262a2b solid;
+    border-radius: 25px;
+    color: rgb(221, 218, 214);
+    font-size: 16px;
+    padding: 6px 36px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.search_bar input{
+    background-color: rgb(51, 55, 58);
+    border: 2px #262a2b solid;
+    border-radius: 25px;
+    color: rgb(221, 218, 214);
+    font-size: 16px;
+    padding: 6px 36px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

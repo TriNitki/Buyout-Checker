@@ -1,17 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from requests import get
 import json
 
 from .models import Item, TableSetting, BlackList
 
 def index(request):
+    
     table_settings = TableSetting.objects.get(id=1)
     black_list = BlackList.objects.all()
 
     req = get('https://api.hypixel.net/skyblock/bazaar')
     products = getBuyOutList(json.loads(req.text)['products'])
-
-    updateDataBase(products)
 
     items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy') 
         if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
@@ -21,6 +20,11 @@ def index(request):
     context['qs_json'] = json.dumps({
         'data': items,
         })
+    
+    if(request.GET.get('mybtn')):
+        updateDataBase(products)
+        return redirect('index')
+    
     return render(request, 'buylist/index.html', context)
 
 def updateDataBase(products):

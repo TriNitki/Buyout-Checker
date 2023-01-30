@@ -12,21 +12,30 @@
 
 <body>
 {% block settings %}
-<input id="search_here" placeholder="type here to search.." />
+    <div class="settings">
+        <div class="search_bar">
+            <input id="search_here" value="10" placeholder="type here to search.." />
+        </div>
+        <form action="#" method="get">
+            <div class="update_button">
+                <input type="submit" class="btn" value="Update" name="mybtn">
+            </div>
+        </form>
+    </div>
 {% endblock settings %}
 
 {% block content %}
-<div id='box'>
-    {% for product in products %}
-        <div class="color_block">
-            <div class="block_content">
-                <div class="number"><h3>#{{forloop.counter}}</h3></div>
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.price }} | {{ product.accuracy }}</p>
+    <div id='box'>
+        {% for product in products %}
+            <div class="color_block">
+                <div class="block_content">
+                    <div class="number"><h3>#{{forloop.counter}}</h3></div>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.price }} | {{ product.accuracy }}</p>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
 {% endblock content %}
 
 {% block scripts %}
