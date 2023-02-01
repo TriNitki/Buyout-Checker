@@ -5,6 +5,7 @@ class Item(models.Model):
     price = models.FloatField()
     min_price = models.FloatField()
     accuracy = models.CharField(max_length=5)
+    image_url = models.URLField(max_length = 200, blank=True)
 
     def __str__(self) -> str:
         return self.name

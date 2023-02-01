@@ -21,12 +21,19 @@ body {
     top: 32px; left: 0px;
     margin-top: -20px;
 }
+.picture img{
+    display: flex;
+    position: relative;
+    top: 38px; left: 92%;
+    margin-top: -36px;
+    width: 36px;
+}
 .settings{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.update_button input{
+.update_button input, .search_bar input{
     background-color: rgb(51, 55, 58);
     border: 2px #262a2b solid;
     border-radius: 25px;
@@ -35,14 +42,30 @@ body {
     padding: 6px 36px;
     margin-left: 5px;
     margin-right: 5px;
+    transition: 0.15s;
 }
-.search_bar input{
-    background-color: rgb(51, 55, 58);
-    border: 2px #262a2b solid;
-    border-radius: 25px;
+.update_button input:hover, .search_bar input:hover{
+    background-color: rgba(51, 55, 58, 0.719);
     color: rgb(221, 218, 214);
+    transition: 0.15s;
+}
+.block{
+    display: flex;
+    justify-content: center;
+}
+.block input{
+    width: 100%;
+    border: none;
+    background-color: rgb(24, 26, 27);
+    color: rgb(75, 81, 85);
+    padding: 14px;
     font-size: 16px;
-    padding: 6px 36px;
-    margin-left: 5px;
-    margin-right: 5px;
+    text-align: center;
+    margin-top: -8px;
+    margin-bottom: -8px;
+    transition: 0.15s;
+}
+.block input:hover{
+    background-color: rgb(51, 55, 58);
+    transition: 0.15s;
 }

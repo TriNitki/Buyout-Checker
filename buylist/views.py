@@ -1,18 +1,19 @@
 from django.shortcuts import render, redirect
-from requests import get
+import requests
 import json
 
 from .models import Item, TableSetting, BlackList
 
 def index(request):
-    
+    #_fillUrls(Item.objects.all())
+
     table_settings = TableSetting.objects.get(id=1)
     black_list = BlackList.objects.all()
 
-    req = get('https://api.hypixel.net/skyblock/bazaar')
+    req = requests.get('https://api.hypixel.net/skyblock/bazaar')
     products = getBuyOutList(json.loads(req.text)['products'])
 
-    items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy') 
+    items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy', 'image_url') 
         if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
 
     context = {}
@@ -65,3 +66,49 @@ def getProductInfo(product):
         accuracy = amount / product['quick_status']['buyVolume']
 
     return {'price': round(price), 'accuracy' : f"{round(accuracy*100, 2)}%", 'min_price' : min_price}
+
+def _fillUrls(items):
+    urls, special = _getImages()
+    for item in items:
+        name = ([item.name] if all([spec_item not in item.name for spec_item in special]) else [spec_item for spec_item in special if spec_item in item.name])[0]
+        try:
+            url = urls[name]
+        except:
+            url = 'None'
+        item.image_url = url
+        item.save()
+
+def _getImages():
+    urls = {
+        'ENCHANTMENT': 'https://wiki.hypixel.net/images/4/4e/SkyBlock_items_enchanted_book.gif',
+        'LOG':'https://wiki.hypixel.net/images/8/8d/Minecraft_items_oak_log.png',
+
+        'ENDSTONE_GEODE': 'https://wiki.hypixel.net/images/2/2d/SkyBlock_items_endstone_geode.png',
+        'PREMIUM_FLESH': 'https://wiki.hypixel.net/images/6/64/SkyBlock_items_premium_flesh.png',
+        'ONYX': 'https://wiki.hypixel.net/images/3/33/SkyBlock_items_onyx.png',
+        'RARE_DIAMOND':'https://wiki.hypixel.net/images/c/c4/SkyBlock_items_rare_diamond.png',
+        'LAPIS_CRYSTAL':'https://wiki.hypixel.net/images/a/a7/SkyBlock_items_lapis_crystal.png',
+        'REDSTONE':'https://wiki.hypixel.net/images/8/87/Minecraft_items_redstone_dust.png',
+        'RABBIT_FOOT':'https://wiki.hypixel.net/images/7/7e/Minecraft_items_rabbits_foot.png',
+        'ROUGH_TOPAZ_GEM':'https://wiki.hypixel.net/images/b/b8/SkyBlock_items_rough_ruby_gem.png',
+        'CANDY_CORN':'https://wiki.hypixel.net/images/2/2f/SkyBlock_items_candy_corn.png',
+        'SALMON_OPAL':'https://wiki.hypixel.net/images/0/00/SkyBlock_items_salmon_opal.png',
+        'MINNOW_BAIT':'https://wiki.hypixel.net/images/c/c4/SkyBlock_items_minnow_bait.png',
+        'ROUGH_AMETHYST_GEM':'https://wiki.hypixel.net/images/0/00/SkyBlock_items_rough_amethyst_gem.png',
+        'BONE':'https://wiki.hypixel.net/images/7/7b/Minecraft_items_bone.png',
+        'ROUGH_JADE_GEM':'https://wiki.hypixel.net/images/a/ad/SkyBlock_items_rough_jade_gem.png',
+        'SAND':'https://wiki.hypixel.net/images/c/c8/Minecraft_items_sand.png',
+        'WHEAT':'https://wiki.hypixel.net/images/4/4e/Minecraft_items_wheat.png',
+        'MOLTEN_CUBE':'https://wiki.hypixel.net/images/1/15/SkyBlock_items_molten_cube.png',
+        'SPIDER_EYE':'https://wiki.hypixel.net/images/a/ab/Minecraft_items_spider_eye.png',
+        'RED_NOSE':'https://wiki.hypixel.net/images/3/36/SkyBlock_items_red_nose.png',
+        'SEEDS':'https://wiki.hypixel.net/images/9/9b/Minecraft_items_wheat_seeds.png',
+        'ENDER_MONOCLE':'https://wiki.hypixel.net/images/4/43/SkyBlock_items_ender_monocle.png',
+        'POTATO_ITEM':'https://wiki.hypixel.net/images/d/d1/Minecraft_items_potato.png',
+    }
+
+    special = [
+        'ENCHANTMENT', 
+        'LOG',
+    ]
+    return urls, special
