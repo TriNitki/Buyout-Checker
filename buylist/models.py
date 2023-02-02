@@ -2,7 +2,7 @@ from django.db import models
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
-    price = models.FloatField()
+    price = models.IntegerField()
     min_price = models.FloatField()
     accuracy = models.CharField(max_length=5)
     image_url = models.URLField(max_length = 200, blank=True)
@@ -19,6 +19,7 @@ class TableSetting(models.Model):
 
 class BlackList(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.item.name

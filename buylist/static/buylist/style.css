@@ -2,7 +2,7 @@
     border: 2px #262a2b solid;
     border-radius: 25px;
     background: rgb(51, 55, 58);
-    width: 570px;
+    width: 710px;
     margin: 7px auto;
 }
 .block_content h3, .block_content p {
@@ -44,7 +44,7 @@ body {
     margin-right: 5px;
     transition: 0.15s;
 }
-.update_button input:hover, .search_bar input:hover{
+.update_button input:hover, .search_bar input:hover, .bl_mode:hover, .zero_price:hover{
     background-color: rgba(51, 55, 58, 0.719);
     color: rgb(221, 218, 214);
     transition: 0.15s;
@@ -57,7 +57,6 @@ body {
     width: 100%;
     border: none;
     background-color: rgb(24, 26, 27);
-    color: rgb(75, 81, 85);
     padding: 14px;
     font-size: 16px;
     text-align: center;
@@ -65,7 +64,29 @@ body {
     margin-bottom: -8px;
     transition: 0.15s;
 }
+.block input:active{
+    color: rgb(221, 218, 214);
+}
+
 .block input:hover{
     background-color: rgb(51, 55, 58);
     transition: 0.15s;
+}
+
+.bl_mode, .zero_price{
+    background-color: rgb(51, 55, 58);
+    border: 2px #262a2b solid;
+    border-radius: 25px;
+    color: rgb(221, 218, 214);
+    font-size: 16px;
+    padding: 6px 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    transition: 0.15s;
+}
+.high{
+    color: rgb(221, 218, 214);
+}
+.not_high{
+    color: rgb(75, 81, 85);
 }

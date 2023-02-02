@@ -1,28 +1,17 @@
-{% load static %}
+{% extends "buylist/base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'buylist/style.css' %}">
-    <title>Document</title>
-</head>
-
-<body>
-
-{% block navbar %}
-<div class="block">
-    <input type="submit" value="Buy Out List" name="">
-    <input type="submit" value="Black List" name="">
-</div>
-{% endblock navbar %}
-<hr>
 {% block settings %}
     <div class="settings">
         <div class="search_bar">
             <input id="search_here" value="10" placeholder="type here to search.." />
+        </div>
+        <div class="bl_mode">
+            <input type="checkbox" name="my-checkbox" id="bl_mode" />
+            <label for="bl_mode">BL Mode</label>
+        </div>
+        <div class="zero_price">
+            <input type="checkbox" name="my-checkbox" id="zero_price" />
+            <label for="zero_price">0 Price Items</label>
         </div>
         <form action="#" method="get">
             <div class="update_button">
@@ -72,5 +61,3 @@
     })
 </script>
 {% endblock scripts %}
-</body>
-</html>

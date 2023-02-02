@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'buylist/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+{% block navbar %}
+<form action="#" method="get">
+    <div class="block">
+        {% if request.path == '/' %}
+        <input type="submit" value="Buy Out List" name="toindex" class="high">
+        {% else %}
+        <input type="submit" value="Buy Out List" name="toindex" class="not_high">
+        {% endif %}
+        {% if request.path == '/black_list/' %}
+        <input type="submit" value="Black List" name="toblacklist" class="high">
+        {% else %}
+        <input type="submit" value="Black List" name="toblacklist" class="not_high">
+        {% endif %}
+    </div>
+</form>
+{% endblock navbar %}
+<hr>
+{% block settings %}{% endblock settings %}
+{% block content %}{% endblock content %}
+
+{% block scripts %}{% endblock scripts %}
+</body>
+</html>
