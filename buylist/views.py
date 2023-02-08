@@ -5,8 +5,6 @@ import json
 from .models import Item, TableSetting, BlackList
 
 def index(request):
-    #_fillUrls(Item.objects.all())
-
     table_settings = TableSetting.objects.get(id=1)
     black_list = BlackList.objects.all()
 
@@ -17,6 +15,7 @@ def index(request):
     context['products'] = items[:10]
     context['qs_json'] = json.dumps({
         'data': items,
+        'zero_price': table_settings.zero_price_items,
         })
 
     if(request.GET.get('mybtn')):
@@ -28,8 +27,6 @@ def index(request):
     
     if(request.GET.get('toblacklist')):
         return redirect('black_list')
-    
-    print(request.path)
     
     return render(request, 'buylist/index.html', context)
 
@@ -51,11 +48,19 @@ def updateDataBase():
     products = getBuyOutList(json.loads(req.text)['products'])
 
     for product in products:
-        item = Item.objects.get(name=product['name'])
+        try:
+            item = Item.objects.get(name=product['name'])
+        except:
+            item = Item()
+        
+        item.name = product['name']
         item.accuracy = product['accuracy']
         item.price = product['price']
         item.min_price = product['min_price']
         item.save()
+    
+    _fillUrls(Item.objects.all())
+
 
 def getBuyOutList(products):
     product_id = products.keys()
@@ -86,6 +91,7 @@ def getProductInfo(product):
         price += (product['quick_status']['buyVolume'] - amount) * max_price
         accuracy = amount / product['quick_status']['buyVolume']
 
+    if amount == 0: accuracy = 0
     return {'price': int(price), 'accuracy' : f"{round(accuracy*100, 2)}%", 'min_price' : min_price}
 
 def _fillUrls(items):
@@ -143,6 +149,7 @@ def _getImages():
         'ICE_HUNK':'https://wiki.hypixel.net/images/b/bd/SkyBlock_items_ice_hunk.png',
         'DRAGON_SCALE':'https://wiki.hypixel.net/images/c/c7/SkyBlock_items_dragon_scale.png',
         'DARK_ORB': 'https://wiki.hypixel.net/images/e/ed/SkyBlock_items_dark_orb.png',
+        'MIDAS_JEWEL': 'https://wiki.hypixel.net/images/d/dc/SkyBlock_items_midas_jewel.png',
     }
 
     special = [
