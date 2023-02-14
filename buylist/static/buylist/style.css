@@ -12,6 +12,14 @@
     color:rgb(221, 218, 214);
     padding: 0 7px;
 }
+
+.color_block_bl {
+    border: 2px rgb(200, 42, 43) solid;
+    border-radius: 25px;
+    background: rgb(200, 55, 58);
+    width: 710px;
+    margin: 7px auto;
+}
 body {
     background: rgb(24, 26, 27);
 }

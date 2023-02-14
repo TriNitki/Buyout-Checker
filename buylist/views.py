@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 import requests
 import json
 
@@ -7,6 +7,7 @@ from .models import Item, TableSetting, BlackList
 def index(request):
     table_settings = TableSetting.objects.get(id=1)
     black_list = BlackList.objects.all()
+    BL = BlackList()
 
     items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy', 'image_url') 
         if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
@@ -18,6 +19,14 @@ def index(request):
         'zero_price': table_settings.zero_price_items,
         })
 
+    if 'name' in request.POST:
+        bl_item = Item.objects.get(name=request.POST.get('name'))
+        try:
+            BlackList.objects.get(item=bl_item)
+        except:
+            BL.item = bl_item
+            BL.save()
+    
     if(request.GET.get('mybtn')):
         updateDataBase()
         return redirect('index')
@@ -31,10 +40,14 @@ def index(request):
     return render(request, 'buylist/index.html', context)
 
 def black_list(request):
-    black_list = BlackList.objects.order_by('date_added')
+    black_list = BlackList.objects.order_by('-date_added')
     context = {}
     context['black_list'] = black_list
 
+    if 'name' in request.POST:
+        bl_item = BlackList.objects.get(item=Item.objects.get(name=request.POST.get('name')))
+        bl_item.delete()
+        
     if(request.GET.get('toindex')):
         return redirect('index')
     
@@ -60,7 +73,6 @@ def updateDataBase():
         item.save()
     
     _fillUrls(Item.objects.all())
-
 
 def getBuyOutList(products):
     product_id = products.keys()

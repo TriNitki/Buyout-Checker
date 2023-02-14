@@ -24,7 +24,7 @@
 {% block content %}
     <div id='box'>
         {% for product in products %}
-            <div class="color_block">
+            <div id="pList" class="color_block" onclick="addToBL('{{ product.name }}')">
                 <div class="block_content">
                     <div class="number"><h3>#{{forloop.counter}}</h3></div>
                     <div class="picture"><img src="{{ product.image_url }}"></div>
@@ -42,30 +42,67 @@
     const allData = JSON.parse(data.replace(/&quot;/g, '"'))
     const itemAmount = document.getElementById('search_here')
     const isZeroPrice = document.getElementById('zero_price')
+    const isBLMode = document.getElementById('bl_mode')
 
-    const listData = allData['data']
-    const noZeroList = getNoZeroItems(listData)
+    const pList_id = document.getElementById("pList");
+
+    let listData = allData['data']
+    let noZeroList = getNoZeroItems(listData)
     const zeroPrice = allData['zero_price'] 
 
     if (zeroPrice){
-        document.getElementById('zero_price').checked = true;
+        isZeroPrice.checked = true;
     } else {
-        document.getElementById('zero_price').checked = false;
+        isZeroPrice.checked = false;
     }
 
     // document.querySelector('#accept')
 
     itemAmount.addEventListener('keyup', ()=>updateList(itemAmount.value))
     isZeroPrice.addEventListener('click', ()=>updateList(itemAmount.value))
+    isBLMode.addEventListener('click', ()=>updateList(itemAmount.value))
 
+    function addToBL(input){
+        if (isBLMode.checked){
+            $.post( "{% url 'index' %}",
+            {
+                csrfmiddlewaretoken: '{{ csrf_token}}' ,
+                name : input,
+            })
 
-    function updateList(input){
+            updateList(itemAmount.value, input)
+        }
+    }
+
+    function updateList(input, toDelete = null){
         let number
         let shownList
 
+        if (isBLMode.checked){
+            pList_id.classList.set("color_block_bl")
+        } else {
+            pList_id.classList.set("color_block")
+        }
+
         if (!document.querySelector('#zero_price').checked){
+            if (toDelete){
+                let deleteItem = noZeroList.findIndex(x => x.name === toDelete)
+                if (deleteItem === 0){
+                    noZeroList.shift()
+                } else {
+                    noZeroList.splice(deleteItem, 1)
+                }
+            }
             shownList = Array.from(noZeroList)
         } else {
+            if (toDelete){
+                let deleteItem = listData.findIndex(x => x.name === toDelete)
+                if (deleteItem === 0){
+                    listData.shift()
+                } else {
+                    listData.splice(deleteItem, 1)
+                }
+            }
             shownList = Array.from(listData)
         }
 
@@ -77,7 +114,7 @@
         if (shownList.length > 0){
             shownList.map(info=>{
                 number++;
-                box.innerHTML += `<div class="color_block"><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
+                box.innerHTML += `<div id="pList class="color_block" onclick="addToBL('${info['name']}')""><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
             })
         } else {
             box.innerHTML = `<div class="color_block"><div class="block_content"><h3>No results found...</h3></div></div>`
@@ -86,6 +123,7 @@
 
     function getNoZeroItems(listData){
         let noZeroItems = [...listData]
+
         for (item of listData){
             if (item['price'] === 0){
                 let key = Object.keys(listData).find(key => listData[key] === item)

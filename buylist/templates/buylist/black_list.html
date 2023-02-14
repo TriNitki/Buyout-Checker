@@ -1,8 +1,9 @@
 {% extends "buylist/base.html" %}
 
 {% block content %}
+    <div id='box'>
         {% for product in black_list %}
-            <div class="color_block">
+            <div class="color_block" onclick="delFromBL('{{ product.item.name }}')">
                 <div class="block_content">
                     <div class="number"><h3>#{{forloop.counter}}</h3></div>
                     <div class="picture"><img src="{{ product.item.image_url }}"></div>
@@ -11,4 +12,50 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+    String.prototype.replaceAt = function(index, replacement) {
+        return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+    }
+    let data = '[{% for product in black_list %}{"name": "{{ product.item.name }}", "price": {{ product.item.price }}, "accuracy": "{{ product.item.accuracy }}", "image_url": "{{ product.item.image_url }}"},{% endfor %}]'
+    data = data.replaceAt(data.length-2, ' ')
+    let blData = JSON.parse(data)
+
+    function delFromBL(input){
+        $.post( "{% url 'black_list' %}",
+        {
+            csrfmiddlewaretoken: '{{ csrf_token}}' ,
+            name : input,
+        })
+        console.log(input)
+        updateList(null, input)
+    }
+    function updateList(input, toDelete = null){
+        let number
+        console.log(toDelete)
+
+        let deleteItem = blData.findIndex(x => x.name === toDelete)
+        if (deleteItem === 0){
+            blData.shift()
+        } else {
+            blData.splice(deleteItem, 1)
+        }
+
+        number = 0
+        box.innerHTML = ""
+
+        if (blData.length > 0){
+            blData.map(info=>{
+                number++;
+                box.innerHTML += `<div class="color_block" onclick="delFromBL('${info['name']}')"><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
+            })
+        } else {
+            box.innerHTML = `<div class="color_block"><div class="block_content"><h3>No results found...</h3></div></div>`
+        }
+    }
+
+</script>
+{% endblock scripts %}
