@@ -3,13 +3,11 @@
 {% block content %}
     <div id='box'>
         {% for product in black_list %}
-            <div class="color_block" onclick="delFromBL('{{ product.item.name }}')">
-                <div class="block_content">
-                    <div class="number"><h3>#{{forloop.counter}}</h3></div>
-                    <div class="picture"><img src="{{ product.item.image_url }}"></div>
-                    <h3>{{ product.item.name }}</h3>
-                    <p>{{ product.item.price }} | {{ product.item.accuracy }}</p>
-                </div>
+            <div class="color_block" onclick="delFromBL('{{ product.item.name }}')">   
+                <img class="picture" src="{{ product.item.image_url }}">
+                <h3 class="number">#{{forloop.counter}}</h3>
+                <h3>{{ product.item.name }}</h3>
+                <p>{{ product.item.price }} | {{ product.item.accuracy }}</p>
             </div>
         {% endfor %}
     </div>
@@ -50,12 +48,11 @@
         if (blData.length > 0){
             blData.map(info=>{
                 number++;
-                box.innerHTML += `<div class="color_block" onclick="delFromBL('${info['name']}')"><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
+                box.innerHTML += `<div class="color_block" onclick="delFromBL('${info['name']}')"><img class="picture" src="${info['image_url']}"><h3 class="number">#${number}</h3><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div>`
             })
         } else {
-            box.innerHTML = `<div class="color_block"><div class="block_content"><h3>No results found...</h3></div></div>`
+            box.innerHTML = `<div class="color_block"><h3>No results found...</h3></div>`
         }
     }
-
 </script>
 {% endblock scripts %}
