@@ -44,8 +44,6 @@
     const isZeroPrice = document.getElementById('zero_price')
     const isBLMode = document.getElementById('bl_mode')
 
-    const pList_id = document.getElementById("pList");
-
     let listData = allData['data']
     let noZeroList = getNoZeroItems(listData)
     const zeroPrice = allData['zero_price'] 
@@ -77,6 +75,7 @@
     function updateList(input, toDelete = null){
         let number
         let shownList
+        let itemClass
 
         if (!document.querySelector('#zero_price').checked){
             if (toDelete){
@@ -105,14 +104,22 @@
         number = 0
         box.innerHTML = ""
 
+        if (isBLMode.checked){
+            itemClass = "color_block_BL"
+        } else {
+            itemClass = "color_block"
+        }
+
         if (shownList.length > 0){
             shownList.map(info=>{
                 number++;
-                box.innerHTML += `<div class="color_block" onclick="addToBL('${info['name']}')""><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
+                box.innerHTML += `<div class="${itemClass}" onclick="addToBL('${info['name']}')""><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
             })
         } else {
             box.innerHTML = `<div class="color_block"><div class="block_content"><h3>No results found...</h3></div></div>`
         }
+
+        
     }
 
     function getNoZeroItems(listData){
