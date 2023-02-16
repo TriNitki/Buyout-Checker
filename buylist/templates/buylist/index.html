@@ -24,13 +24,11 @@
 {% block content %}
     <div id='box'>
         {% for product in products %}
-            <div class="color_block" onclick="addToBL('{{ product.name }}')">
-                <div class="block_content">
-                    <div class="number"><h3>#{{forloop.counter}}</h3></div>
-                    <div class="picture"><img src="{{ product.image_url }}"></div>
-                    <h3>{{ product.name }}</h3>
-                    <p>{{ product.price }} | {{ product.accuracy }}</p>
-                </div>
+            <div class="color_block" onclick="addToBL('{{ product.name }}')">   
+                <div class="number"><h3>#{{forloop.counter}}</h3></div>
+                <div class="picture"><img src="{{ product.image_url }}"></div>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.price }} | {{ product.accuracy }}</p>
             </div>
         {% endfor %}
     </div>
@@ -113,13 +111,11 @@
         if (shownList.length > 0){
             shownList.map(info=>{
                 number++;
-                box.innerHTML += `<div class="${itemClass}" onclick="addToBL('${info['name']}')""><div class="block_content"><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
+                box.innerHTML += `<div class="${itemClass}" onclick="addToBL('${info['name']}')""><div class="number"><h3>#${number}</h3></div><div class="picture"><img src="${info['image_url']}"></div><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div>`
             })
         } else {
-            box.innerHTML = `<div class="color_block"><div class="block_content"><h3>No results found...</h3></div></div>`
+            box.innerHTML = `<div class="color_block"><h3>No results found...</h3></div>`
         }
-
-        
     }
 
     function getNoZeroItems(listData){
