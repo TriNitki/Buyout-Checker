@@ -24,12 +24,16 @@
 {% block content %}
     <div id='box'>
         {% for product in products %}
-            <div class="color_block" onclick="addToBL('{{ product.name }}')">   
+        <div class="color_block">
+            <div class="block_bg" onclick="addToBL('{{ product.name }}')">   
                 <img class="picture" src="{{ product.image_url }}">
                 <h3 class="number">#{{forloop.counter}}</h3>
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.price }} | {{ product.accuracy }}</p>
             </div>
+        </div>
+        {% empty %}
+        <div class="color_block"><div class="block_bg"><h3>No items found...</h3></div></div>
         {% endfor %}
     </div>
 {% endblock content %}
@@ -111,10 +115,10 @@
         if (shownList.length > 0){
             shownList.map(info=>{
                 number++;
-                box.innerHTML += `<div class="${itemClass}" onclick="addToBL('${info['name']}')"><img class="picture" src="${info['image_url']}"><h3 class="number">#${number}</h3><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div>`
+                box.innerHTML += `<div class="${itemClass}"><div class="block_bg" onclick="addToBL('${info['name']}')"><img class="picture" src="${info['image_url']}"><h3 class="number">#${number}</h3><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
             })
         } else {
-            box.innerHTML = `<div class="color_block"><h3>No results found...</h3></div>`
+            box.innerHTML = `<div class="color_block"><div class="block_bg"><h3>No items found...</h3></div></div>`
         }
     }
 

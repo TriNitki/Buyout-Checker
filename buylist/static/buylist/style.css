@@ -1,11 +1,15 @@
-.color_block, .color_block_BL{
+.block_bg{
     border: 2px #262a2b solid;
     border-radius: 25px;
     background: rgb(51, 55, 58);
+}
+
+.color_block, .color_block_BL{
     width: 710px;
     margin: 7px auto;
     position: relative;
 }
+
 .color_block h3, .color_block p, .color_block_BL h3, .color_block_BL p{
     text-align: center;
     margin-top: 0.1em;
@@ -13,22 +17,25 @@
     color:rgb(221, 218, 214);
     padding: 0 7px;
 }
-.color_block_BL{
+
+.color_block_BL div:hover{
     border: 2px rgba(200, 42, 43, 0.5) solid;
     border-radius: 25px;
     background: rgba(200, 55, 58, 0.5);
-    width: 710px;
-    margin: 7px auto;
+    transition: 0.10s;
 }
+
 body {
     background: rgb(24, 26, 27);
 }
+
 .number{
     display: flex;
     position: absolute;
     top: 9px;
     margin-top: -20px;
 }
+
 .picture{
     display: flex;
     position: relative;
@@ -36,11 +43,13 @@ body {
     margin-top: -36px;
     width: 36px;
 }
+
 .settings{
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .update_button input, .search_bar input{
     background-color: rgb(51, 55, 58);
     border: 2px #262a2b solid;
@@ -52,15 +61,18 @@ body {
     margin-right: 5px;
     transition: 0.15s;
 }
+
 .update_button input:hover, .search_bar input:hover, .bl_mode:hover, .zero_price:hover{
     background-color: rgba(51, 55, 58, 0.719);
     color: rgb(221, 218, 214);
     transition: 0.15s;
 }
+
 .block{
     display: flex;
     justify-content: center;
 }
+
 .block input{
     width: 100%;
     border: none;
@@ -72,6 +84,7 @@ body {
     margin-bottom: -8px;
     transition: 0.15s;
 }
+
 .block input:active{
     color: rgb(221, 218, 214);
 }
@@ -92,9 +105,11 @@ body {
     margin-right: 5px;
     transition: 0.15s;
 }
+
 .high{
     color: rgb(221, 218, 214);
 }
+
 .not_high{
     color: rgb(75, 81, 85);
 }
