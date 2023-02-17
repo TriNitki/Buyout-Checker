@@ -14,7 +14,7 @@
 <body>
 {% block navbar %}
 <form action="#" method="get">
-    <div class="block">
+    <div class="block" onclick="updateDBSettings()">
         {% if request.path == '/' %}
         <input type="submit" value="Buy Out List" name="toindex" class="high">
         {% else %}

@@ -3,7 +3,7 @@
 {% block settings %}
     <div class="settings">
         <div class="search_bar">
-            <input id="search_here" value="10" placeholder="type here to search.." />
+            <input id="search_here" value="{{ settings.item_amount }}" placeholder="type here to search.." />
         </div>
         <div class="bl_mode">
             <input type="checkbox" name="my-checkbox" id="bl_mode"/>
@@ -40,26 +40,27 @@
 
 {% block scripts %}
 <script>
+    // DB data
     const data = '{{qs_json}}'
     const allData = JSON.parse(data.replace(/&quot;/g, '"'))
-    const itemAmount = document.getElementById('search_here')
-    const isZeroPrice = document.getElementById('zero_price')
-    const isBLMode = document.getElementById('bl_mode')
-
     let listData = allData['data']
     let noZeroList = getNoZeroItems(listData)
-    const zeroPrice = allData['zero_price'] 
+    const zeroPriceDB = allData['zero_price']
+    const itemsAmountDB = allData['item_amount']
 
-    if (zeroPrice){
-        isZeroPrice.checked = true;
+    // Page data
+    const itemAmount = document.getElementById('search_here')
+    const zeroPrice = document.getElementById('zero_price')
+    const isBLMode = document.getElementById('bl_mode')
+
+    if (zeroPriceDB){
+        zeroPrice.checked = true;
     } else {
-        isZeroPrice.checked = false;
+        zeroPrice.checked = false;
     }
 
-    // document.querySelector('#accept')
-
     itemAmount.addEventListener('keyup', ()=>updateList(itemAmount.value))
-    isZeroPrice.addEventListener('click', ()=>updateList(itemAmount.value))
+    zeroPrice.addEventListener('click', ()=>updateList(itemAmount.value))
     isBLMode.addEventListener('click', ()=>updateList(itemAmount.value))
 
     function addToBL(input){
@@ -79,7 +80,7 @@
         let shownList
         let itemClass
 
-        if (!document.querySelector('#zero_price').checked){
+        if (!zeroPrice.checked){
             if (toDelete){
                 let deleteItem = noZeroList.findIndex(x => x.name === toDelete)
                 if (deleteItem === 0){
@@ -133,6 +134,18 @@
         }
 
         return noZeroItems
+    }
+
+    function updateDBSettings(){
+        if (itemsAmountDB != itemAmount.value || zeroPriceDB != zeroPrice.checked){
+            console.log('pupa')
+            $.post( "{% url 'index' %}",
+            {
+                csrfmiddlewaretoken: '{{ csrf_token}}' ,
+                item_amount : itemAmount.value,
+                zero_price_items : zeroPrice.checked,
+            })
+        }
     }
 </script>
 {% endblock scripts %}

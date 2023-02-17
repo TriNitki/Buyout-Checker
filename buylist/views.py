@@ -9,14 +9,19 @@ def index(request):
     black_list = BlackList.objects.all()
     BL = BlackList()
 
-    items = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy', 'image_url') 
-        if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]]
-
     context = {}
-    context['products'] = items[:10]
-    context['qs_json'] = json.dumps({
-        'data': items,
+    context['products'] = [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy', 'image_url') 
+        if (not(item['price'] == 0) or table_settings.zero_price_items) and item['name'] not in [bl_item.item.name for bl_item in black_list]][:table_settings.max_items_amount]
+    
+    context['settings'] = {
         'zero_price': table_settings.zero_price_items,
+        'item_amount': table_settings.max_items_amount,
+    }
+    context['qs_json'] = json.dumps({
+        'data': [item for item in Item.objects.order_by('price').values('name', 'price', 'accuracy', 'image_url') 
+            if item['name'] not in [bl_item.item.name for bl_item in black_list]],
+        'zero_price': table_settings.zero_price_items,
+        'item_amount': table_settings.max_items_amount,
         })
 
     if 'name' in request.POST:
@@ -27,6 +32,14 @@ def index(request):
             BL.item = bl_item
             BL.save()
     
+    if 'item_amount' in request.POST and 'zero_price_items' in request.POST:
+        if request.POST.get('zero_price_items') == 'false':
+            table_settings.zero_price_items = False
+        else:
+            table_settings.zero_price_items = True
+        table_settings.max_items_amount = int(request.POST.get('item_amount'))
+        table_settings.save()
+
     if(request.GET.get('mybtn')):
         updateDataBase()
         return redirect('index')

@@ -3,7 +3,7 @@
 {% block content %}
     <div id='box'>
         {% for product in black_list %}
-        <div class="color_block">
+        <div class="color_block_BO">
             <div class="block_bg" onclick="delFromBL('{{ product.item.name }}')">   
                 <img class="picture" src="{{ product.item.image_url }}">
                 <h3 class="number">#{{forloop.counter}}</h3>
@@ -32,12 +32,11 @@
             csrfmiddlewaretoken: '{{ csrf_token}}' ,
             name : input,
         })
-        console.log(input)
+
         updateList(null, input)
     }
     function updateList(input, toDelete = null){
         let number
-        console.log(toDelete)
 
         let deleteItem = blData.findIndex(x => x.name === toDelete)
         if (deleteItem === 0){
@@ -52,7 +51,7 @@
         if (blData.length > 0){
             blData.map(info=>{
                 number++;
-                box.innerHTML += `<div class="color_block"><div class="block_bg" onclick="delFromBL('${info['name']}')"><img class="picture" src="${info['image_url']}"><h3 class="number">#${number}</h3><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
+                box.innerHTML += `<div class="color_block_BO"><div class="block_bg" onclick="delFromBL('${info['name']}')"><img class="picture" src="${info['image_url']}"><h3 class="number">#${number}</h3><h3>${info['name']}</h3><p>${info['price']} | ${info['accuracy']}</p></div></div>`
             })
         } else {
             box.innerHTML = `<div class="color_block"><div class="block_bg"><h3>No items found...</h3></div></div>`

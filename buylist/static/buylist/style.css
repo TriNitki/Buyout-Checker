@@ -4,13 +4,13 @@
     background: rgb(51, 55, 58);
 }
 
-.color_block, .color_block_BL{
+.color_block, .color_block_BL, .color_block_BO{
     width: 710px;
     margin: 7px auto;
     position: relative;
 }
 
-.color_block h3, .color_block p, .color_block_BL h3, .color_block_BL p{
+.color_block h3, .color_block p, .color_block_BL h3, .color_block_BL p, .color_block_BO h3, .color_block_BO p{
     text-align: center;
     margin-top: 0.1em;
     margin-bottom: 0.1em;
@@ -19,10 +19,17 @@
 }
 
 .color_block_BL div:hover{
-    border: 2px rgba(200, 42, 43, 0.5) solid;
+    border: 2px rgba(150, 0, 0, 0.5) solid;
     border-radius: 25px;
-    background: rgba(200, 55, 58, 0.5);
-    transition: 0.10s;
+    background: rgba(150, 0, 0, 0.5);
+    transition: 0.15s;
+}
+
+.color_block_BO div:hover{
+    border: 2px rgba(0, 150, 0, 0.5) solid;
+    border-radius: 25px;
+    background: rgba(0, 150, 0, 0.5);
+    transition: 0.15s;
 }
 
 body {
@@ -32,14 +39,14 @@ body {
 .number{
     display: flex;
     position: absolute;
-    top: 9px;
+    top: 12px;
     margin-top: -20px;
 }
 
 .picture{
     display: flex;
     position: relative;
-    top: 38px; left: 92%;
+    top: 40px; left: 92%;
     margin-top: -36px;
     width: 36px;
 }
