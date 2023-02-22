@@ -30,11 +30,18 @@ Tiny explanation:
 + 17293 - Is the approximate price of the full buyout of all specific items from the bazaar.
 + 1.49% - Is the percentage of information available on which the buyout price was based.
 
-You may ask me this question:
+## FAQ
+Q: 
+> Why is the data outdated?
+
+A:
+> Don't forget to update the data using the Update Button which is located on the right side of the top menu. This operation may take a while.
+
+
+Q:
 > Why is the buyout price inaccurate?
 
-To this I have a simple answer:
+A:
 
 > The Hypixel API provides only a fraction of all the offers in the bazaar, and that is why the information provided for some items may be incorrect, 
 so if you don't want to try your luck, then I advise you to choose items whose accuracy is > 80%.
-
