@@ -15,7 +15,7 @@ pip install -r requirements.txt
 ```
 + Start the server:
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
 
 After that, follow the link [127.0.0.1:8000](https://127.0.0.1:8000), you will see the main page.
