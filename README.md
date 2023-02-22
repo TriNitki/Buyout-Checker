@@ -18,7 +18,7 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-After that, follow the link [127.0.0.1:8000](https://127.0.0.1:8000), you will see the main page.
+After that, follow the link [127.0.0.1:8000](http://127.0.0.1:8000), you will see the main page.
 
 ## Usage
 In the picture below you can see an example of an item from list.
