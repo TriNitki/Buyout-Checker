@@ -35,7 +35,7 @@ Q:
 > Why is the data outdated?
 
 A:
-> Don't forget to update the data using the Update Button which is located on the right side of the top menu. This operation may take a while.
+> Don't forget to update the data using the Update Button which is located on the right side of the top menu. This process may take a while.
 
 
 Q:
